@@ -30,10 +30,16 @@ def check_mst(adj_mat: np.ndarray,
         return abs(a - b) < allowed_error
 
     total = 0
+    num_of_edges = 0
     for i in range(mst.shape[0]):
         for j in range(i+1):
             total += mst[i, j]
+            if mst[i, j] > 0:
+                    num_of_edges += 1
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
+    assert num_of_edges == len(mst)-1, 'Proposed MST has incorect number of edges'
+    assert mst.shape == adj_mat.shape, 'Propose MST has incorect number of verteces'
+    print(num_of_edges, len(mst))
 
 
 def test_mst_small():
@@ -65,10 +71,11 @@ def test_mst_single_cell_data():
     check_mst(g.adj_mat, g.mst, 57.263561605571695)
 
 
-def test_mst_student():
-    """
-    
-    TODO: Write at least one unit test for MST construction.
-    
-    """
-    pass
+def test_mst_single_node():
+
+    single_node_adj_mat = np.array([[0]])  # A single-node graph
+
+    g = Graph(single_node_adj_mat)
+    g.construct_mst()
+
+    assert np.array_equal(g.mst, np.array([[0]])), "MST should be empty for a single-node graph"
