@@ -1,22 +1,33 @@
+
 # .github/workflows/app.yaml
-name: Project Tests
-on: push
+
+name: project3
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      
+      - name: Install Python 3
+        uses: actions/setup-python@v1
         with:
-          python-version: 3.9
-
-      - name: Install package
+          python-version: 3.9 
+      
+      - name: Install dependencies
         run: |
-          pip3 install . 
-      - name: Test with pytest
-        run: |
-          python3 -m pytest -vv tests/*py
+          python3 -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+      
+      - name: Run unit tests
+        run: python3 -m pytest -v test/*
