@@ -13,10 +13,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
-      - name: Install package
-        run: |
-          pip3 install . 
+ 
       - name: Test with pytest
         run: |
           python3 -m pytest -vv tests/*py
