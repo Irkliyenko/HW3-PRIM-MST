@@ -99,6 +99,12 @@ Tests MST construction using **single-cell data** from the **Slingshot R package
 - The total MST weight matches the expected value.
 - The MST correctly represents the connectivity of the single-cell data.
 
+### **4. `test_mst_single_node`**
+**Description:**
+This test verifies that the MST construction works correctly for a single-node graph. A graph with only one node has no edges, so the MST should be an empty adjacency matrix (all zeros).
 
-* Write at least two unit tests for MST construction (2)
+**Process:**
+1. Create a single-node adjacency matrix.
+2. Initialize the Graph and construct the MST.
+3. Ensures that the MST is still an empty adjacency matrix, as no edges exist.
 
