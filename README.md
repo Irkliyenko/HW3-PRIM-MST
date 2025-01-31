@@ -1,54 +1,104 @@
 # HW 3: Prim's algorithm
 
-In this assignment, you'll implement Prim's algorithm, a non-trivial greedy algorithm used to construct minimum spanning trees. 
+---
 
-## Tasks
+## Description
 
-### Coding
+The `mst/graph.py` script contains the `Graph` class, which takes the adjcency matrix or .csv files as an input. This class includes the implementation of the **Prim's** algorithm, defined in the `construct_mst` method, and `_load_adjacency_matrix_from_csv` method that loads .csv file as a adjency matrix.
 
-* [TODO] Complete the `construct_mst` method found in `mst/graph.py`. All necessary modules have already been imported. You should not rely on any other dependencies (e.g. networkx). 
+## Class Methods and Attributes
 
-### Development
+### 1. **Initialization (`__init__`)**
+**Description:**  
+Initializes the graph using an adjacency matrix or a CSV file.
 
-* [TODO] Add more assertions to the `check_mst` function in `test/test_mst.py`.
-* [TODO] Write at least one more unit test (in the `test_mst.py` file) for your `construct_mst` implementation. (Two unit tests have already been provided: the first operates on a small graph of four nodes, and the second on a larger graph of 140 single cells, projected onto a lower dimensional subspace.)
-* [Optional] Make your package `pip` installable. (Refer to prevous assignments for more in-depth information.)
-* [Optional] Automate testing with `pytest` and GitHub Actions, and add a status badge to this README file. (Refer to previous assignments for more in-depth information.)
+**Attributes:**
+- `self.adj_mat` → Stores the adjacency matrix.
+- `self.adjList` → Dictionary for adjacency list representation.
+- `self.mst` → Stores the MST.
 
-## Getting started
+**Parameters:**
+- `adjacency_mat` *(Union[np.ndarray, str])*:  
+  A NumPy adjacency matrix or path to a CSV file.
 
-Fork this repository to your own GitHub account. Work on the codebase locally and commit changes to your forked repository. 
+---
 
-You will need following packages:
+### 2. **Loading from CSV (`_load_adjacency_matrix_from_csv`)**
+**Description:**  
+Reads an adjacency matrix from a CSV file.
 
-- [numpy](https://numpy.org/)
-- [scikit-learn](https://scikit-learn.org/)
-- [pytest](https://docs.pytest.org/en/7.2.x/)
+**Parameters:**
+- `path` *(str)*: Path to the CSV file.
 
-We also strongly recommend you use the built-in [heapq](https://docs.python.org/3/library/heapq.html) module.
+**Returns:**
+- *(np.ndarray)*: The loaded adjacency matrix.
 
-## Completing the assignment
+---
 
-Push your code to GitHub with passing unit tests, and submit a link to your repository through this [google form link](https://forms.gle/guyuWE6hsTiz34WTA)
+### 3. **Constructing MST (`construct_mst`)**
+**Description:**  
+Builds the **Minimum Spanning Tree (MST)** using **Prim’s Algorithm**.
 
-## Grading
+**Algorithm Overview:**
+1. Start from node `0` and initialize a priority queue.
+2. Extract the smallest edge and add the corresponding node to the MST.
+3. Repeat until all nodes are included.
 
-### Code (6 points)
+**Output:**
+- Updates `self.mst` with the MST adjacency matrix.
 
-* Minimum spanning tree construction works correctly (6)
-    * Correct implementation of Prim's algorithm (4)
-    * Produces expected output on small graph (1) 
-    * Produces expected output on single cell data (1) 
+---
 
-### Unit tests (3 points)
+## **Test Functions**
 
-* Complete function "check_mst" (1)
+### **1. `check_mst()` (Helper Function)**
+**Description:**  
+A helper function that validates the correctness of the computed MST.
+
+**Assertions:**
+- The total weight of the MST is within the allowed error margin.
+- The MST has exactly `n-1` edges for `n` nodes.
+- The MST retains the same shape as the original adjacency matrix.
+
+**Parameters:**
+- `adj_mat` *(np.ndarray)* → Original adjacency matrix of the full graph.
+- `mst` *(np.ndarray)* → Computed adjacency matrix of the MST.
+- `expected_weight` *(int)* → Expected weight of the MST.
+- `allowed_error` *(float, default=0.0001)* → Allowed numerical error margin.
+
+---
+
+### **2. `test_mst_small()`**
+**Description:**  
+Tests MST construction on a **small graph** stored in a CSV file.
+
+**Process:**
+1. Loads an adjacency matrix from `small.csv`.
+2. Constructs the MST using `Graph.construct_mst()`.
+3. Validates the MST using `check_mst()` with an expected weight of **8**.
+
+**Expected Outcome:**  
+- The MST contains exactly `n-1` edges.
+- The total MST weight is **8**.
+- The MST matrix has the correct shape.
+
+---
+
+### **3. `test_mst_single_cell_data()`**
+**Description:**  
+Tests MST construction using **single-cell data** from the **Slingshot R package**.
+
+**Process:**
+1. Loads **cell coordinates** from `slingshot_example.txt`.
+2. Computes **pairwise distances** to form a weighted adjacency matrix.
+3. Constructs the MST using `Graph.construct_mst()`.
+4. Validates the MST using `check_mst()` with an expected weight of **57.263561605571695**.
+
+**Expected Outcome:**  
+- The MST contains exactly `n-1` edges.
+- The total MST weight matches the expected value.
+- The MST correctly represents the connectivity of the single-cell data.
+
+
 * Write at least two unit tests for MST construction (2)
 
-### Style (1 points)
-
-* Readable code with clear comments and method descriptions (1)
-
-### Extra credit (0.5)
-
-* Github actions/workflow (0.5)
